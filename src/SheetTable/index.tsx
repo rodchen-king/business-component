@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-06 17:07:00
+ * @LastEditTime: 2021-12-06 17:18:31
  * @LastEditors: Please set LastEditors
  */
 // @ts-nocheck
@@ -362,7 +362,7 @@ class Luckysheet extends React.Component {
                         )}
                       >
                         <Space>
-                          <span>{filterLetters(index)}</span>
+                          <span>{filterLetters(index)} 列 </span>
                           <Space className="sheet_table_dnd_text">
                             <UnorderedListOutlined />
                             {item.content}
@@ -456,7 +456,7 @@ class Luckysheet extends React.Component {
         </div>
         <div className="sheet_table_footer">
           <span className="sheet_table_footer_l">
-            共 200 条数据, 其中错误 20项
+            共 200 条数据, 其中错误 20 项
           </span>
           <Space className="sheet_table_footer_r">
             <Checkbox
