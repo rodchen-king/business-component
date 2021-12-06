@@ -2,30 +2,16 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-06 17:07:00
+ * @LastEditTime: 2021-12-06 16:32:27
  * @LastEditors: Please set LastEditors
  */
 // @ts-nocheck
 import React from 'react';
-import {
-  Button,
-  Card,
-  Radio,
-  Checkbox,
-  Space,
-  Dropdown,
-  Menu,
-  Tooltip,
-} from 'antd';
+import { Button, Card, Radio, Checkbox, Space, Dropdown, Menu } from 'antd';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ReactJson from 'react-json-view';
 import 'antd/dist/antd.css';
-import {
-  ExclamationCircleOutlined,
-  DownOutlined,
-  ProfileTwoTone,
-  UnorderedListOutlined,
-} from '@ant-design/icons';
+import { ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
 import './index.less';
 
 const luckysheet = window.luckysheet;
@@ -54,26 +40,20 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
   padding: `4px`,
   margin: `4px`,
+
   // change background colour if dragging
+  background: isDragging ? 'lightgreen' : 'lightyellow',
 
   // styles we need to apply on draggables
   ...draggableStyle,
 });
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? '#fff' : '#fff',
+  background: isDraggingOver ? 'lightblue' : '#ffd8bf',
   display: 'flex',
   padding: grid,
   overflow: 'auto',
 });
-
-const filterLetters = (i) => {
-  if (i >= 0 && i <= 25) {
-    return String.fromCharCode(65 + i);
-  } else {
-    return undefined;
-  }
-};
 
 class Luckysheet extends React.Component {
   constructor(props) {
@@ -101,6 +81,7 @@ class Luckysheet extends React.Component {
       resultData: [],
       errorListCheck: false,
     };
+    this.onDragEnd = this.onDragEnd.bind(this);
   }
 
   onDragEnd(result) {
@@ -321,63 +302,13 @@ class Luckysheet extends React.Component {
 
   menuList = (
     <Menu>
-      <Menu.Item className="sheet_table-menu_item_text">
+      <Menu.Item className="sheet_table-menu_item">
         <a onClick={() => this.filterData('all')}>清空全部数据</a>
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item className="sheet_table-menu_item_text">
+      <Menu.Item className="sheet_table-menu_item">
         <a onClick={() => this.filterData('error')}>仅清空错误数据</a>
       </Menu.Item>
-    </Menu>
-  );
-
-  leftMenu = (
-    <Menu>
-      <Menu.Item className="sheet_table-menu_item_text">
-        <span className="sheet_table_text">请拖动字段来对应列</span>
-      </Menu.Item>
-      <Menu.Divider />
-      <div>
-        <DragDropContext onDragEnd={(e) => this.onDragEnd(e)}>
-          <Droppable droppableId="droppable" direction="vertical">
-            {(provided, snapshot) => (
-              <div
-                ref={provided.innerRef}
-                style={{
-                  ...getListStyle(snapshot.isDraggingOver),
-                  flexDirection: 'column',
-                }}
-                {...provided.droppableProps}
-              >
-                {this.state.items.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style,
-                        )}
-                      >
-                        <Space>
-                          <span>{filterLetters(index)}</span>
-                          <Space className="sheet_table_dnd_text">
-                            <UnorderedListOutlined />
-                            {item.content}
-                          </Space>
-                        </Space>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
     </Menu>
   );
 
@@ -398,41 +329,44 @@ class Luckysheet extends React.Component {
         title={
           <Space>
             商品录入
-            <Tooltip
-              title={
-                <>
-                  <span>使用指南：</span>
-                  <br></br>
-                  <span>
-                    1、拖动数据项，以适配源数据的顺序，如您Excel中数据排序依次为编码、价格和数量，则您也可以将数据项的顺序调整为一致
-                  </span>
-                  <br></br>
-                  <span>2、复制文件数据（多列一起），在文本框内进行粘贴</span>
-                  <br></br>
-                  <span>
-                    3、点击识别按钮进行数据校验，如全部正确，则点击录入按钮可录入数据，如存在错误数据，则需修改后再进行录入
-                  </span>
-                </>
-              }
-            >
-              <ExclamationCircleOutlined />
-            </Tooltip>
+            <ExclamationCircleOutlined />
           </Space>
         }
       >
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          拖拽切换列表对应字段
+          <Droppable droppableId="droppable" direction="horizontal">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}
+                {...provided.droppableProps}
+              >
+                {this.state.items.map((item, index) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
+                          snapshot.isDragging,
+                          provided.draggableProps.style,
+                        )}
+                      >
+                        {item.content}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+
         <div className="sheet_table_top">
-          <Space>
-            <span>排序列</span>
-            <Dropdown
-              trigger={['click']}
-              overlay={this.leftMenu}
-              placement="bottomLeft"
-            >
-              <a>
-                <ProfileTwoTone />
-              </a>
-            </Dropdown>
-          </Space>
+          <Radio.Group onChange={this.onChange}></Radio.Group>
           <Space>
             <Dropdown
               trigger={['click']}

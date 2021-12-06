@@ -2,21 +2,12 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-06 17:07:00
+ * @LastEditTime: 2021-12-06 16:57:50
  * @LastEditors: Please set LastEditors
  */
 // @ts-nocheck
 import React from 'react';
-import {
-  Button,
-  Card,
-  Radio,
-  Checkbox,
-  Space,
-  Dropdown,
-  Menu,
-  Tooltip,
-} from 'antd';
+import { Button, Card, Radio, Checkbox, Space, Dropdown, Menu } from 'antd';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ReactJson from 'react-json-view';
 import 'antd/dist/antd.css';
@@ -24,7 +15,6 @@ import {
   ExclamationCircleOutlined,
   DownOutlined,
   ProfileTwoTone,
-  UnorderedListOutlined,
 } from '@ant-design/icons';
 import './index.less';
 
@@ -54,7 +44,9 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
   padding: `4px`,
   margin: `4px`,
+
   // change background colour if dragging
+  background: isDragging ? 'lightgreen' : 'lightyellow',
 
   // styles we need to apply on draggables
   ...draggableStyle,
@@ -339,7 +331,7 @@ class Luckysheet extends React.Component {
       <Menu.Divider />
       <div>
         <DragDropContext onDragEnd={(e) => this.onDragEnd(e)}>
-          <Droppable droppableId="droppable" direction="vertical">
+          <Droppable droppableId="droppable" direction="horizontal">
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -361,13 +353,7 @@ class Luckysheet extends React.Component {
                           provided.draggableProps.style,
                         )}
                       >
-                        <Space>
-                          <span>{filterLetters(index)}</span>
-                          <Space className="sheet_table_dnd_text">
-                            <UnorderedListOutlined />
-                            {item.content}
-                          </Space>
-                        </Space>
+                        {filterLetters(item.content) + item.content}
                       </div>
                     )}
                   </Draggable>
@@ -398,25 +384,7 @@ class Luckysheet extends React.Component {
         title={
           <Space>
             商品录入
-            <Tooltip
-              title={
-                <>
-                  <span>使用指南：</span>
-                  <br></br>
-                  <span>
-                    1、拖动数据项，以适配源数据的顺序，如您Excel中数据排序依次为编码、价格和数量，则您也可以将数据项的顺序调整为一致
-                  </span>
-                  <br></br>
-                  <span>2、复制文件数据（多列一起），在文本框内进行粘贴</span>
-                  <br></br>
-                  <span>
-                    3、点击识别按钮进行数据校验，如全部正确，则点击录入按钮可录入数据，如存在错误数据，则需修改后再进行录入
-                  </span>
-                </>
-              }
-            >
-              <ExclamationCircleOutlined />
-            </Tooltip>
+            <ExclamationCircleOutlined />
           </Space>
         }
       >

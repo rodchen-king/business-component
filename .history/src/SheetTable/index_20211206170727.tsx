@@ -408,7 +408,6 @@ class Luckysheet extends React.Component {
                   </span>
                   <br></br>
                   <span>2、复制文件数据（多列一起），在文本框内进行粘贴</span>
-                  <br></br>
                   <span>
                     3、点击识别按钮进行数据校验，如全部正确，则点击录入按钮可录入数据，如存在错误数据，则需修改后再进行录入
                   </span>

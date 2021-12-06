@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-06 17:07:00
+ * @LastEditTime: 2021-12-06 17:05:58
  * @LastEditors: Please set LastEditors
  */
 // @ts-nocheck
@@ -397,26 +397,24 @@ class Luckysheet extends React.Component {
       <Card
         title={
           <Space>
-            商品录入
+          <>
+          商品录入
             <Tooltip
               title={
                 <>
                   <span>使用指南：</span>
-                  <br></br>
                   <span>
                     1、拖动数据项，以适配源数据的顺序，如您Excel中数据排序依次为编码、价格和数量，则您也可以将数据项的顺序调整为一致
                   </span>
-                  <br></br>
                   <span>2、复制文件数据（多列一起），在文本框内进行粘贴</span>
-                  <br></br>
                   <span>
                     3、点击识别按钮进行数据校验，如全部正确，则点击录入按钮可录入数据，如存在错误数据，则需修改后再进行录入
                   </span>
-                </>
+                <>
               }
             >
               <ExclamationCircleOutlined />
-            </Tooltip>
+            </Tooltip></>
           </Space>
         }
       >
