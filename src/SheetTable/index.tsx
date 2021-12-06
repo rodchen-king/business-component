@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-01 22:11:04
+ * @LastEditTime: 2021-12-06 10:21:24
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -130,36 +130,6 @@ class Luckysheet extends React.Component {
           defaultRowHeight: 19, //自定义行高
           defaultColWidth: 73, //自定义列宽
           celldata: data,
-          config: {
-            merge: {}, //合并单元格
-            rowlen: {}, //表格行高
-            columnlen: {}, //表格列宽
-            rowhidden: {}, //隐藏行
-            colhidden: {}, //隐藏列
-            borderInfo: {}, //边框
-            authority: {
-              //当前工作表的权限配置
-              selectLockedCells: 1, //选定锁定单元格
-              selectunLockedCells: 1, //选定解除锁定的单元格
-              editObjects: 0, //编辑对象
-              editScenarios: 0, //编辑方案
-              hintText: '不可编辑', //弹窗提示的文字
-              algorithmName: 'None', //加密方案：MD2,MD4,MD5,RIPEMD-128,RIPEMD-160,SHA-1,SHA-256,SHA-384,SHA-512,WHIRLPOOL
-              saltValue: null, //密码解密的盐参数，为一个自己定的随机数值
-
-              allowRangeList: [
-                {
-                  //区域保护
-                  name: 'area', //名称
-                  password: '1', //密码
-                  hintText: '不可编辑', //提示文字
-                  algorithmName: 'None', //加密方案：MD2,MD4,MD5,RIPEMD-128,RIPEMD-160,SHA-1,SHA-256,SHA-384,SHA-512,WHIRLPOOL
-                  saltValue: null, //密码解密的盐参数，为一个自己定的随机数值
-                  sqref: 'Cell$E$1:$E$28', //区域范围
-                },
-              ],
-            },
-          },
           scrollLeft: 0, //左右滚动条位置
           // "scrollTop": 315, //上下滚动条位置
           luckysheet_select_save: [], //选中的区域
@@ -281,13 +251,9 @@ class Luckysheet extends React.Component {
   filterData = () => {
     const { showErrorData, data } = this.state;
 
-    debugger;
     let sheetData = luckysheet.transToData(data).filter((item, index) => {
       return item[3] && item[3].v === '通过';
     });
-    // sheetData.map((item, index) => {
-    //   luckysheet.setCellValue(index + 1, 4, 345)
-    // })
 
     luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
 
@@ -304,13 +270,9 @@ class Luckysheet extends React.Component {
       luckysheet.create(this.setConfig(data));
     } else {
       let sheetData = luckysheet.getSheetData();
-      debugger;
       sheetData = sheetData.filter((item, index) => {
         return !item[3] || item[3].v !== '通过';
       });
-      // sheetData.map((item, index) => {
-      //   luckysheet.setCellValue(index + 1, 4, 345)
-      // })
 
       luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
     }

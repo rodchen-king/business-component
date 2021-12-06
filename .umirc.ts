@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-11-30 22:59:39
- * @LastEditTime: 2021-12-01 11:16:09
+ * @LastEditTime: 2021-12-02 22:51:17
  * @LastEditors: rodchen
  */
 import { defineConfig } from 'dumi';
@@ -14,6 +14,8 @@ export default defineConfig({
   logo: 'https://user-images.githubusercontent.com/9554297/83762004-a0761b00-a6a9-11ea-83b4-9c8ff721d4b8.png',
   outputPath: 'docs-dist',
   mode: 'site',
+  publicPath: '/business-component/',
+  base: '/business-component/',
   scripts: [
     'https://cdn.jsdelivr.net/npm/luckysheet/dist/plugins/js/plugin.js',
     'https://cdn.jsdelivr.net/npm/luckysheet/dist/luckysheet.umd.js',

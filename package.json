@@ -1,6 +1,5 @@
 {
-  "private": true,
-  "name": "business-component",
+  "name": "bs-business-component",
   "version": "1.0.0",
   "scripts": {
     "start": "dumi dev",
