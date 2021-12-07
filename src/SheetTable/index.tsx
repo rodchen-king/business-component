@@ -2,8 +2,8 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-06 17:18:31
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-07 19:02:55
+ * @LastEditors: rodchen
  */
 // @ts-nocheck
 import React from 'react';
@@ -18,7 +18,6 @@ import {
   Tooltip,
 } from 'antd';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import ReactJson from 'react-json-view';
 import 'antd/dist/antd.css';
 import {
   ExclamationCircleOutlined,
@@ -29,6 +28,8 @@ import {
 import './index.less';
 
 const luckysheet = window.luckysheet;
+
+let itemsTemp = [];
 
 // for dnd
 // fake data generator
@@ -78,26 +79,19 @@ const filterLetters = (i) => {
 class Luckysheet extends React.Component {
   constructor(props) {
     super(props);
+
+    itemsTemp = props.columns.map((item, index) => {
+      return {
+        id: `item-0${index}`,
+        content: item[0],
+        code: item[1],
+      };
+    });
+
     this.state = {
       showErrorData: false,
       data: [],
-      items: [
-        {
-          id: 'item-0',
-          content: '商品编码',
-          code: 'skuCode',
-        },
-        {
-          id: 'item-1',
-          content: '商品数量',
-          code: 'count',
-        },
-        {
-          id: 'item-2',
-          content: '商品价格',
-          code: 'price',
-        },
-      ],
+      items: [...itemsTemp],
       resultData: [],
       errorListCheck: false,
     };
@@ -118,12 +112,69 @@ class Luckysheet extends React.Component {
     this.setState({
       items,
     });
+
+    itemsTemp = items;
+
+    luckysheet.refresh();
   }
 
+  getCount = () => {
+    try {
+      const { items } = this.state;
+
+      let data = luckysheet.getSheetData();
+      let validIndex = items.length;
+
+      if (data[0] && data[0][validIndex]) {
+        return {
+          total: data.filter((item) => item[validIndex]).length,
+          error: data.filter(
+            (item) => item[validIndex] && item[validIndex] !== '通过',
+          ).length,
+        };
+      } else {
+        return {
+          total: 0,
+          error: 0,
+        };
+      }
+    } catch (e) {
+      return {
+        total: 0,
+        error: 0,
+      };
+    }
+  };
+
   setConfig = (data) => {
+    const { items } = this.state;
     return {
       container: 'luckysheet',
       showtoolbar: false,
+      hook: {
+        columnTitleCellRenderBefore: function (columnAbc, postion, ctx) {
+          if (columnAbc.name) {
+            let charCode = columnAbc.name.charCodeAt();
+            if (charCode - 65 <= items.length) {
+              columnAbc.name = itemsTemp[charCode - 65]
+                ? itemsTemp[charCode - 65].content
+                : '校验结果';
+            } else {
+              columnAbc.name = '';
+            }
+          }
+        },
+        cellRenderAfter: function (cell, postion, sheetFile, ctx) {
+          if (cell) {
+            cell.fs = 10;
+          }
+          // console.log(postion);
+        },
+        cellAllRenderBefore: function (data, sheetFile, ctx) {
+          sheetFile.config.borderInfo = [];
+          // console.info(data,sheetFile,ctx)
+        },
+      },
       // showtoolbarConfig: {
       //   undoRedo: true, //撤销重做，注意撤消重做是两个按钮，由这一个配置决定显示还是隐藏
       //   paintFormat: false, //格式刷
@@ -146,8 +197,9 @@ class Luckysheet extends React.Component {
           hide: 0, //是否隐藏
           row: 36, //行数
           column: 18, //列数
-          defaultRowHeight: 19, //自定义行高
-          defaultColWidth: 73, //自定义列宽
+          defaultRowHeight: 20, //自定义行高
+          defaultColWidth: 120, //自定义列宽
+          config: {},
           celldata: data,
           scrollLeft: 0, //左右滚动条位置
           // "scrollTop": 315, //上下滚动条位置
@@ -166,6 +218,61 @@ class Luckysheet extends React.Component {
           image: [], //图片
           showGridLines: 1, //是否显示网格线
           dataVerification: {}, //数据验证配置
+          luckysheet_alternateformat_save: [
+            {
+              cellrange: {
+                //单元格范围
+                row: [0, 1000],
+                column: [0, 18],
+              },
+              format: {
+                head: {
+                  //页眉颜色
+                  fc: '#6aa84f',
+                  bc: '#ffffff',
+                },
+                one: {
+                  //第一种颜色
+                  bc: '#ffffff',
+                },
+                two: {
+                  //第二种颜色
+                  bc: '#f2f4f5',
+                },
+                foot: {
+                  //页脚颜色
+                  fc: '#000',
+                  bc: '#a5efcc',
+                },
+              },
+              hasRowHeader: false, //含有页眉
+              hasRowFooter: false, //含有页脚
+            },
+          ], //交替颜色
+          luckysheet_alternateformat_save_modelCustom: [
+            {
+              head: {
+                //页眉颜色
+                fc: '#6aa84f',
+                bc: '#ffffff',
+              },
+              one: {
+                //第一种颜色
+                fc: '#000',
+                bc: '#ffffff',
+              },
+              two: {
+                //第二种颜色
+                fc: '#000',
+                bc: '#e5fbee',
+              },
+              foot: {
+                //页脚颜色
+                fc: '#000',
+                bc: '#a5efcc',
+              },
+            },
+          ], //自定义交替颜色
         },
       ],
       cellRightClickConfig: {
@@ -199,9 +306,9 @@ class Luckysheet extends React.Component {
         zoom: false, // 缩放
       },
       column: 10, //列数
+      columnHeaderHeight: 30,
       lang: 'zh',
       defaultFontSize: '10',
-      rowHeaderWidth: '40',
       frozen: {
         type: 'rangeBoth',
         range: { row_focus: 1, column_focus: 1 },
@@ -216,54 +323,62 @@ class Luckysheet extends React.Component {
   getData = () => {
     console.time();
     let sheetData = luckysheet.getSheetData();
-    let data = sheetData.map((item) => {
-      let obj = {};
-      item.slice(0, 3).map((innerItem, index) => {
-        obj[this.state.items[index].code] = innerItem && innerItem.v;
+    let data = sheetData
+      .filter((item) => item[0])
+      .map((item) => {
+        let obj = {};
+        item.slice(0, itemsTemp.length).map((innerItem, index) => {
+          obj[this.state.items[index].code] = innerItem && innerItem.v;
+        });
+        return obj;
       });
-      return obj;
-    });
 
-    console.log(data);
-    debugger;
-    this.setState({
-      resultData: data.filter((item) => item.skuCode),
-    });
-    console.timeEnd();
+    return data;
   };
 
   resetData = () => {
-    let sheetData = luckysheet.getSheetData();
-    let skuCodeIndex = this.state.items.findIndex((value, index, array) => {
-      return value.code == 'skuCode';
-    });
-    sheetData.map((item, index) => {
-      if (!item[skuCodeIndex]) return item;
-      if (item[skuCodeIndex].v > 1231325) {
-        item[3] = {
-          ...item[3],
-          v: '通过',
-          m: '通过',
-          fc: 'green', //字体颜色为 "#990000"
-        };
-      } else {
-        item[3] = {
-          ...item[3],
-          v: '失败',
-          m: '失败',
-          fc: 'red', //字体颜色为 "#990000"
-        };
-      }
-      item[3].ct = { fa: 'General', t: 'g' };
-    });
-    // sheetData.map((item, index) => {
-    //   luckysheet.setCellValue(index + 1, 4, 345)
-    // })
+    const { validDataFunction } = this.props;
+    const resultData = this.getData();
+    new Promise((resolve, reject) => {
+      validDataFunction(resultData, resolve);
+    }).then((res) => {
+      const { items } = this.state;
+      let validIndex = items.length;
 
-    luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
-    this.setState({
-      data: luckysheet.transToCellData(sheetData),
-      errorListCheck: false,
+      let sheetData = luckysheet.getSheetData();
+
+      sheetData.map((item, index) => {
+        if (!res[index]) return item;
+
+        if (res[index].flag) {
+          item[validIndex] = {
+            ...item[validIndex],
+            v: '通过',
+            m: '通过',
+            fc: 'green', //字体颜色为 "#990000"
+          };
+        } else {
+          item[validIndex] = {
+            ...item[validIndex],
+            v: res[index].checkResults,
+            m: res[index].checkResults,
+            fc: 'red', //字体颜色为 "#990000"
+          };
+        }
+
+        item[validIndex].ct = { fa: 'General', t: 'g' };
+      });
+      // sheetData.map((item, index) => {
+      //   luckysheet.setCellValue(index + 1, 4, 345)
+      // })
+
+      luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
+      this.setState({
+        data: luckysheet.transToCellData(sheetData),
+        errorListCheck: false,
+      });
+
+      debugger;
     });
   };
 
@@ -274,7 +389,7 @@ class Luckysheet extends React.Component {
         return false;
       }
       if (type === 'error') {
-        return item[3] && item[3].v === '通过';
+        return item[itemsTemp.length] && item[itemsTemp.length].v === '通过';
       }
     });
 
@@ -294,7 +409,7 @@ class Luckysheet extends React.Component {
     } else {
       let sheetData = luckysheet.getSheetData();
       sheetData = sheetData.filter((item, index) => {
-        return !item[3] || item[3].v !== '通过';
+        return !item[itemsTemp.length] || item[itemsTemp.length].v !== '通过';
       });
 
       luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
@@ -383,6 +498,9 @@ class Luckysheet extends React.Component {
 
   render() {
     const { errorListCheck } = this.state;
+    const { title } = this.props;
+
+    let totalSummary = this.getCount();
 
     const luckyCss = {
       margin: '0px',
@@ -397,7 +515,7 @@ class Luckysheet extends React.Component {
       <Card
         title={
           <Space>
-            商品录入
+            {title}
             <Tooltip
               title={
                 <>
@@ -456,7 +574,7 @@ class Luckysheet extends React.Component {
         </div>
         <div className="sheet_table_footer">
           <span className="sheet_table_footer_l">
-            共 200 条数据, 其中错误 20 项
+            共 {totalSummary.total} 条数据, 其中错误 {totalSummary.error} 项
           </span>
           <Space className="sheet_table_footer_r">
             <Checkbox
@@ -466,7 +584,6 @@ class Luckysheet extends React.Component {
             仅展示错误数据
           </Space>
         </div>
-        <ReactJson src={this.state.resultData} />
       </Card>
     );
   }

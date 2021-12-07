@@ -1,6 +1,6 @@
 {
   "name": "bs-business-component",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -28,10 +28,11 @@
   },
   "dependencies": {
     "adaptd": "^0.1.0",
-    "antd": "^4.17.2",
+    "antd": "4.17.2",
+    "bs-business-component": "^1.0.1",
+    "classnames": "^2.3.1",
     "react": "^16.12.0",
-    "react-beautiful-dnd": "10.0.0",
-    "react-json-view": "^1.21.3"
+    "react-beautiful-dnd": "10.0.0"
   },
   "devDependencies": {
     "@umijs/test": "^3.0.5",

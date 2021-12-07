@@ -14,7 +14,17 @@ import { SheetTable } from '../index';
 
 export default () => (
   <div>
-    <SheetTable />
+    <SheetTable
+      columns={[
+        ['商品编码', 'skuCode'],
+        ['商品名称', 'skuName'],
+        ['商品名称1', 'skuName'],
+      ]}
+      validDataFunction={(data, resolve) => {
+        resolve([]);
+      }}
+      title="商品录入"
+    />
   </div>
 );
 ```
