@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-08 18:16:00
+ * @LastEditTime: 2021-12-08 20:32:57
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -545,7 +545,7 @@ class DataValidation extends React.Component {
       top: '0px',
     };
     return (
-      <Card>
+      <>
         <div className="sheet_table_top">
           <Space>
             <span>排序列</span>
@@ -611,7 +611,7 @@ class DataValidation extends React.Component {
             仅展示错误数据
           </Space>
         </div>
-      </Card>
+      </>
     );
   }
 }
