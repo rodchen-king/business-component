@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-07 19:02:55
+ * @LastEditTime: 2021-12-08 00:27:22
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -129,7 +129,7 @@ class Luckysheet extends React.Component {
         return {
           total: data.filter((item) => item[validIndex]).length,
           error: data.filter(
-            (item) => item[validIndex] && item[validIndex] !== '通过',
+            (item) => item[validIndex] && item[validIndex].v !== '通过',
           ).length,
         };
       } else {
@@ -320,6 +320,11 @@ class Luckysheet extends React.Component {
     luckysheet.create(this.setConfig([]));
   }
 
+  componentWillUnmount() {
+    // luckysheet.create(this.setConfig([]));
+    luckysheet.destroy();
+  }
+
   getData = () => {
     console.time();
     let sheetData = luckysheet.getSheetData();
@@ -337,7 +342,7 @@ class Luckysheet extends React.Component {
   };
 
   resetData = () => {
-    const { validDataFunction } = this.props;
+    const { validDataFunction, updateData } = this.props;
     const resultData = this.getData();
     new Promise((resolve, reject) => {
       validDataFunction(resultData, resolve);
@@ -378,6 +383,8 @@ class Luckysheet extends React.Component {
         errorListCheck: false,
       });
 
+      updateData = this.getData();
+
       debugger;
     });
   };
@@ -394,7 +401,7 @@ class Luckysheet extends React.Component {
     });
 
     luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
-
+    exportData = this.getData();
     this.setState({
       data: luckysheet.transToCellData(sheetData),
       errorListCheck: false,
