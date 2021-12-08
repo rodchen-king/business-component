@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-08 00:27:22
+ * @LastEditTime: 2021-12-08 18:16:00
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -16,6 +16,7 @@ import {
   Dropdown,
   Menu,
   Tooltip,
+  message,
 } from 'antd';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import 'antd/dist/antd.css';
@@ -25,11 +26,24 @@ import {
   ProfileTwoTone,
   UnorderedListOutlined,
 } from '@ant-design/icons';
+import axios from 'axios';
 import './index.less';
 
 const luckysheet = window.luckysheet;
 
 let itemsTemp = [];
+
+// const mapping = [
+//   { "key": "skuCode", "name": "SKU编码", "rule": "skuCode"  },
+//   { "key": "quantity", "name": "数量", "rule": "quantity" },
+//   { "key": "price", "name": "单价", "rule": "price" }
+// ]
+
+const mapping = new Map([
+  ['skuCode', 'SKU编码'],
+  ['quantity', '数量'],
+  ['price', '单价'],
+]);
 
 // for dnd
 // fake data generator
@@ -76,15 +90,20 @@ const filterLetters = (i) => {
   }
 };
 
-class Luckysheet extends React.Component {
+class DataValidation extends React.Component {
   constructor(props) {
     super(props);
+    this.props.onRef(this);
 
     itemsTemp = props.columns.map((item, index) => {
+      if (!mapping.get(item))
+        throw Error(
+          `${item} is not in DataValidation component, please fix this error`,
+        );
       return {
         id: `item-0${index}`,
-        content: item[0],
-        code: item[1],
+        content: mapping.get(item),
+        code: item,
       };
     });
 
@@ -119,31 +138,11 @@ class Luckysheet extends React.Component {
   }
 
   getCount = () => {
-    try {
-      const { items } = this.state;
-
-      let data = luckysheet.getSheetData();
-      let validIndex = items.length;
-
-      if (data[0] && data[0][validIndex]) {
-        return {
-          total: data.filter((item) => item[validIndex]).length,
-          error: data.filter(
-            (item) => item[validIndex] && item[validIndex].v !== '通过',
-          ).length,
-        };
-      } else {
-        return {
-          total: 0,
-          error: 0,
-        };
-      }
-    } catch (e) {
-      return {
-        total: 0,
-        error: 0,
-      };
-    }
+    const { resultData } = this.state;
+    return {
+      total: resultData.length,
+      error: resultData.filter((item) => !item.flag).length,
+    };
   };
 
   setConfig = (data) => {
@@ -325,6 +324,18 @@ class Luckysheet extends React.Component {
     luckysheet.destroy();
   }
 
+  getValidateData = () => {
+    const { resultData } = this.state;
+    return {
+      successData: resultData
+        .filter((item) => item.flag)
+        .map(({ flag, checkResults, ...item }) => item),
+      failData: resultData
+        .filter((item) => !item.flag)
+        .map(({ flag, checkResults, ...item }) => item),
+    };
+  };
+
   getData = () => {
     console.time();
     let sheetData = luckysheet.getSheetData();
@@ -332,9 +343,11 @@ class Luckysheet extends React.Component {
       .filter((item) => item[0])
       .map((item) => {
         let obj = {};
+
         item.slice(0, itemsTemp.length).map((innerItem, index) => {
           obj[this.state.items[index].code] = innerItem && innerItem.v;
         });
+
         return obj;
       });
 
@@ -342,55 +355,68 @@ class Luckysheet extends React.Component {
   };
 
   resetData = () => {
-    const { validDataFunction, updateData } = this.props;
+    const { validDataUrl, updateData, columns } = this.props;
     const resultData = this.getData();
-    new Promise((resolve, reject) => {
-      validDataFunction(resultData, resolve);
-    }).then((res) => {
-      const { items } = this.state;
-      let validIndex = items.length;
 
-      let sheetData = luckysheet.getSheetData();
-
-      sheetData.map((item, index) => {
-        if (!res[index]) return item;
-
-        if (res[index].flag) {
-          item[validIndex] = {
-            ...item[validIndex],
-            v: '通过',
-            m: '通过',
-            fc: 'green', //字体颜色为 "#990000"
-          };
-        } else {
-          item[validIndex] = {
-            ...item[validIndex],
-            v: res[index].checkResults,
-            m: res[index].checkResults,
-            fc: 'red', //字体颜色为 "#990000"
-          };
+    axios
+      .post(validDataUrl, {
+        columns: columns,
+        data: resultData,
+      })
+      .then((result) => {
+        result = result.data;
+        if (result.status !== '0') {
+          message.error(result.msg);
+          return;
         }
+        const { items } = this.state;
+        let validIndex = items.length;
+        let res = result.data;
 
-        item[validIndex].ct = { fa: 'General', t: 'g' };
-      });
-      // sheetData.map((item, index) => {
-      //   luckysheet.setCellValue(index + 1, 4, 345)
-      // })
+        let sheetData = luckysheet.getSheetData();
 
-      luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
-      this.setState({
-        data: luckysheet.transToCellData(sheetData),
-        errorListCheck: false,
-      });
+        sheetData.map((item, index) => {
+          if (!res[index]) return item;
 
-      updateData = this.getData();
+          if (res[index].flag) {
+            item[validIndex] = {
+              ...item[validIndex],
+              v: '通过',
+              m: '通过',
+              fc: 'green', //字体颜色为 "#990000"
+            };
+          } else {
+            item[validIndex] = {
+              ...item[validIndex],
+              v: res[index].checkResults,
+              m: res[index].checkResults,
+              fc: 'red', //字体颜色为 "#990000"
+            };
+          }
 
-      debugger;
-    });
+          item[validIndex].ct = { fa: 'General', t: 'g' };
+        });
+        // sheetData.map((item, index) => {
+        //   luckysheet.setCellValue(index + 1, 4, 345)
+        // })
+
+        luckysheet.create(
+          this.setConfig(luckysheet.transToCellData(sheetData)),
+        );
+        this.setState({
+          data: luckysheet.transToCellData(sheetData),
+          errorListCheck: false,
+          resultData: res,
+        });
+
+        console.log(setExportData);
+        setExportData([123123]);
+      })
+      .catch((err) => {});
   };
 
   filterData = (type: string) => {
-    const { showErrorData, data } = this.state;
+    const { showErrorData, data, resultData } = this.state;
     let sheetData = luckysheet.transToData(data).filter((item, index) => {
       if (type === 'all') {
         return false;
@@ -401,10 +427,10 @@ class Luckysheet extends React.Component {
     });
 
     luckysheet.create(this.setConfig(luckysheet.transToCellData(sheetData)));
-    exportData = this.getData();
     this.setState({
       data: luckysheet.transToCellData(sheetData),
       errorListCheck: false,
+      resultData: type === 'all' ? [] : resultData.filter((item) => item.flag),
     });
   };
 
@@ -519,10 +545,19 @@ class Luckysheet extends React.Component {
       top: '0px',
     };
     return (
-      <Card
-        title={
+      <Card>
+        <div className="sheet_table_top">
           <Space>
-            {title}
+            <span>排序列</span>
+            <Dropdown
+              trigger={['click']}
+              overlay={this.leftMenu}
+              placement="bottomLeft"
+            >
+              <a>
+                <ProfileTwoTone />
+              </a>
+            </Dropdown>
             <Tooltip
               title={
                 <>
@@ -542,21 +577,6 @@ class Luckysheet extends React.Component {
             >
               <ExclamationCircleOutlined />
             </Tooltip>
-          </Space>
-        }
-      >
-        <div className="sheet_table_top">
-          <Space>
-            <span>排序列</span>
-            <Dropdown
-              trigger={['click']}
-              overlay={this.leftMenu}
-              placement="bottomLeft"
-            >
-              <a>
-                <ProfileTwoTone />
-              </a>
-            </Dropdown>
           </Space>
           <Space>
             <Dropdown
@@ -596,4 +616,4 @@ class Luckysheet extends React.Component {
   }
 }
 
-export default Luckysheet;
+export default DataValidation;

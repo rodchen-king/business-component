@@ -4,17 +4,17 @@ nav:
   path: /components
 ---
 
-## SheetTable
+## DataValidation
 
 Demo:
 
 ```tsx
 import React from 'react';
-import { SheetTable } from '../index';
+import { DataValidation } from '../index';
 
 export default () => (
   <div>
-    <SheetTable
+    <DataValidation
       columns={[
         ['商品编码', 'skuCode'],
         ['商品名称', 'skuName'],
