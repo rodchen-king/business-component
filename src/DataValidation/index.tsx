@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-08 20:32:57
+ * @LastEditTime: 2021-12-13 15:36:39
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -43,6 +43,8 @@ const mapping = new Map([
   ['skuCode', 'SKU编码'],
   ['quantity', '数量'],
   ['price', '单价'],
+  ['regionCode', '库区'],
+  ['checkQuantity', '实盘数量'],
 ]);
 
 // for dnd
