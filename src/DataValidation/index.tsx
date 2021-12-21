@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-13 15:36:39
+ * @LastEditTime: 2021-12-21 14:01:02
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -165,9 +165,13 @@ class DataValidation extends React.Component {
             }
           }
         },
-        cellRenderAfter: function (cell, postion, sheetFile, ctx) {
+        cellRenderBefore: function (cell, postion, sheetFile, ctx) {
           if (cell) {
             cell.fs = 10;
+
+            if (typeof cell.v === 'string') {
+              cell.m = cell.v = cell.m.trim();
+            }
           }
           // console.log(postion);
         },
@@ -471,11 +475,11 @@ class DataValidation extends React.Component {
 
   menuList = (
     <Menu>
-      <Menu.Item className="sheet_table-menu_item_text">
+      <Menu.Item key="1" className="sheet_table-menu_item_text">
         <a onClick={() => this.filterData('all')}>清空全部数据</a>
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item className="sheet_table-menu_item_text">
+      <Menu.Item key="2" className="sheet_table-menu_item_text">
         <a onClick={() => this.filterData('error')}>仅清空错误数据</a>
       </Menu.Item>
     </Menu>
@@ -483,7 +487,7 @@ class DataValidation extends React.Component {
 
   leftMenu = (
     <Menu>
-      <Menu.Item className="sheet_table-menu_item_text">
+      <Menu.Item key="3" className="sheet_table-menu_item_text">
         <span className="sheet_table_text">请拖动字段来对应列</span>
       </Menu.Item>
       <Menu.Divider />

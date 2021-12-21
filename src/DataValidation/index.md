@@ -9,24 +9,23 @@ nav:
 Demo:
 
 ```tsx
-import React from 'react';
+import React, { useRef } from 'react';
 import { DataValidation } from '../index';
 
-export default () => (
-  <div>
-    <DataValidation
-      columns={[
-        ['商品编码', 'skuCode'],
-        ['商品名称', 'skuName'],
-        ['商品名称1', 'skuName'],
-      ]}
-      validDataFunction={(data, resolve) => {
-        resolve([]);
-      }}
-      title="商品录入"
-    />
-  </div>
-);
+export default () => {
+  let dataValidationRef: DataValidation = useRef();
+
+  return (
+    <div>
+      <DataValidation
+        columns={['skuCode', 'quantity', 'price']}
+        onRef={(ref) => {
+          dataValidationRef = ref;
+        }}
+      />
+    </div>
+  );
+};
 ```
 
 More skills for writing demo: https://d.umijs.org/guide/demo-principle
