@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-21 14:01:02
+ * @LastEditTime: 2021-12-22 14:24:35
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -45,6 +45,7 @@ const mapping = new Map([
   ['price', '单价'],
   ['regionCode', '库区'],
   ['checkQuantity', '实盘数量'],
+  ['shareRatio', '共享比例'],
 ]);
 
 // for dnd
