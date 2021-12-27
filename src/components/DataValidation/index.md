@@ -1,7 +1,12 @@
 ---
 nav:
-  title: Components
-  path: /components
+  title: '组件'
+  order: 1
+group:
+  title: 组件
+  order: 0
+title: 数据校验
+order: 1
 ---
 
 ## DataValidation
@@ -10,7 +15,7 @@ Demo:
 
 ```tsx
 import React, { useRef } from 'react';
-import { DataValidation } from '../index';
+import { DataValidation } from '../../index';
 
 export default () => {
   let dataValidationRef: DataValidation = useRef();
