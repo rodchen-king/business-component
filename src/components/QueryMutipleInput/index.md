@@ -9,13 +9,13 @@ title: 批量查询组件
 order: 1
 ---
 
-## QueryInput
+## QueryMutipleInput
 
 Demo:
 
 ```tsx
 import React, { useRef } from 'react';
-import { QueryInput } from '../../index';
+import { QueryMutipleInput } from '../../index';
 
 export default () => {
   const handleOnChange = (value) => {
@@ -24,7 +24,7 @@ export default () => {
 
   return (
     <div>
-      <QueryInput onValueChange={handleOnChange} />
+      <QueryMutipleInput onValueChange={handleOnChange} />
     </div>
   );
 };

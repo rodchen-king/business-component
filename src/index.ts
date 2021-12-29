@@ -13,4 +13,4 @@ const resposne = JSON.parse(localStorage.getItem('userInfo') || '{}');
 axios.defaults.headers.common['sso-sessionid'] = resposne?.sessionId || '';
 
 export { default as DataValidation } from './components/DataValidation';
-export { default as QueryInput } from './components/QueryInput';
+export { default as QueryMutipleInput } from './components/QueryMutipleInput';

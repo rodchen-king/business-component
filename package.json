@@ -1,6 +1,6 @@
 {
   "name": "@bit-sun/business-component",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -30,7 +30,6 @@
     "ahooks": "^3.1.2",
     "antd": "4.17.2",
     "axios": "^0.24.0",
-    "bs-business-component": "^1.0.1",
     "classnames": "^2.3.1",
     "react": "^16.12.0",
     "react-beautiful-dnd": "10.0.0"
@@ -41,8 +40,7 @@
     "father-build": "^1.17.2",
     "gh-pages": "^3.0.0",
     "lint-staged": "^10.0.7",
-    "prettier": "^2.2.1",
-    "yorkie": "^2.0.0"
+    "prettier": "^2.2.1"
   },
   "publishConfig": {
     "access": "public"

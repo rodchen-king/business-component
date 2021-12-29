@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-29 14:19:32
+ * @LastEditTime: 2021-12-29 16:04:51
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -10,9 +10,9 @@ import React, { useState, useEffect } from 'react';
 import { useDebounceFn } from 'ahooks';
 import { Input, Button, Modal } from 'antd';
 import 'antd/dist/antd.css';
-import styles from './index.less';
+import './index.less';
 
-const QueryInput = ({ onValueChange }) => {
+const QueryMutipleInput = ({ onValueChange }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [value, setValue] = useState('');
   const [popvalue, setPopValue] = useState('');
@@ -61,8 +61,8 @@ const QueryInput = ({ onValueChange }) => {
   };
 
   return (
-    <div className={styles.query_input}>
-      <Input.Group compact>
+    <div className={'query_input'}>
+      <div class="query_input_show">
         <Input
           value={value}
           onChange={outerChange}
@@ -73,13 +73,13 @@ const QueryInput = ({ onValueChange }) => {
             formaData(e.clipboardData.getData('text'));
             e.preventDefault();
           }}
-          style={{ width: 'calc(100% - 50px)' }}
+          style={{ width: 'calc(100% - 30px)' }}
           placeholder="请输入（查询多个值请用 ; 或 , 分割）"
         />
-        <Button className={styles.button} onClick={showModal} type="primary">
-          ...
-        </Button>
-      </Input.Group>
+        <div className={'query_input_expand_button'} onClick={showModal} type="primary">
+          <span>...</span>
+        </div>
+      </div>
       <Modal
         width={600}
         title="多值录入"
@@ -95,13 +95,13 @@ const QueryInput = ({ onValueChange }) => {
           </Button>,
         ]}
       >
-        <div className={styles.query_input_wrapper}>
-          <div className={styles.query_input_wrapper_left}>录入区：</div>
-          <div className={styles.query_input_wrapper_right}>
+        <div className={'query_input_wrapper'}>
+          <div className={'query_input_wrapper_left'}>录入区：</div>
+          <div className={'query_input_wrapper_right'}>
             <div>
               如需同时使用多个值进行查询，请使用逗号、分号、空格或换行进行值的分隔，中英文格式的符号均支持
             </div>
-            <div className={styles.query_input_textArea}>
+            <div className={'query_input_textArea'}>
               <Input.TextArea
                 value={popvalue}
                 onChange={onChange}
@@ -128,4 +128,4 @@ function ToCDB(str) {
   return tmp;
 }
 
-export default QueryInput;
+export default QueryMutipleInput;

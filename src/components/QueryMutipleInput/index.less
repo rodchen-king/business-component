@@ -1,0 +1,40 @@
+@import '~antd/dist/antd.less'; // 引入官方提供的 less 样式入口文件
+
+.query_input {
+  &_show {
+    display: flex;
+  }
+
+  &_expand_button {
+    position: relative;
+    width: 30px;
+    background: @primary-color;
+    color: #ffffff;
+    cursor: pointer;
+
+    span {
+      position: absolute;
+      height: 20px;
+      line-height: 14px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &_wrapper {
+    display: flex;
+
+    &_left {
+      width: 100px;
+    }
+
+    &_right {
+      color: #9e9e9e;
+    }
+  }
+
+  &_textArea {
+    margin-top: 15px;
+  }
+}

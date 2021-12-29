@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-11-30 22:59:39
- * @LastEditTime: 2021-12-29 11:29:23
+ * @LastEditTime: 2021-12-29 16:14:33
  * @LastEditors: rodchen
  */
 import { defineConfig } from 'dumi';
@@ -14,8 +14,6 @@ export default defineConfig({
   logo: 'https://user-images.githubusercontent.com/9554297/83762004-a0761b00-a6a9-11ea-83b4-9c8ff721d4b8.png',
   outputPath: 'docs-dist',
   mode: 'site',
-  base: '/business-component/',
-  publicPath: '/business-component/',
   scripts: [
     'https://bitsun-website.oss-cn-shanghai.aliyuncs.com/cdn/dist/plugins/js/plugin.js',
     'https://bitsun-website.oss-cn-shanghai.aliyuncs.com/cdn/dist/luckysheet.umd.js',
