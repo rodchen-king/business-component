@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
+    "ahooks": "^3.1.2",
     "antd": "4.17.2",
     "axios": "^0.24.0",
     "bs-business-component": "^1.0.1",
