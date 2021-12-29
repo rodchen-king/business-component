@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-29 17:42:42
+ * @LastEditTime: 2021-12-29 19:14:56
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -75,7 +75,7 @@ const QueryMutipleInput = ({ onValueChange }) => {
           style={{ width: 'calc(100% - 30px)' }}
           placeholder="请输入（查询多个值请用 ; 或 , 分割）"
         />
-        <Button style={{width: '30px', padding: '2px', height: 'auto'}} type="primary">...</Button>
+        <Button style={{width: '30px', padding: '2px', height: 'auto'}} onClick={showModal} type="primary">...</Button>
       </div>
       <Modal
         width={600}
