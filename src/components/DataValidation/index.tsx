@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-22 14:24:35
+ * @LastEditTime: 2021-12-29 17:11:56
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -19,7 +19,6 @@ import {
   message,
 } from 'antd';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import 'antd/dist/antd.css';
 import {
   ExclamationCircleOutlined,
   DownOutlined,

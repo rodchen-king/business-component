@@ -2,14 +2,13 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-29 16:04:51
+ * @LastEditTime: 2021-12-29 17:42:42
  * @LastEditors: rodchen
  */
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useDebounceFn } from 'ahooks';
 import { Input, Button, Modal } from 'antd';
-import 'antd/dist/antd.css';
 import './index.less';
 
 const QueryMutipleInput = ({ onValueChange }) => {
@@ -76,9 +75,7 @@ const QueryMutipleInput = ({ onValueChange }) => {
           style={{ width: 'calc(100% - 30px)' }}
           placeholder="请输入（查询多个值请用 ; 或 , 分割）"
         />
-        <div className={'query_input_expand_button'} onClick={showModal} type="primary">
-          <span>...</span>
-        </div>
+        <Button style={{width: '30px', padding: '2px', height: 'auto'}} type="primary">...</Button>
       </div>
       <Modal
         width={600}
