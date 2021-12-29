@@ -18,11 +18,13 @@ import React, { useRef } from 'react';
 import { QueryInput } from '../../index';
 
 export default () => {
-  let dataValidationRef: QueryInput = useRef();
+  const handleOnChange = (value) => {
+    console.log(value);
+  };
 
   return (
     <div>
-      <QueryInput />
+      <QueryInput onValueChange={handleOnChange} />
     </div>
   );
 };

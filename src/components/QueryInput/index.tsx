@@ -2,7 +2,7 @@
  * @Description:
  * @Author: rodchen
  * @Date: 2021-12-01 10:52:08
- * @LastEditTime: 2021-12-29 12:02:17
+ * @LastEditTime: 2021-12-29 14:19:32
  * @LastEditors: rodchen
  */
 // @ts-nocheck
@@ -12,7 +12,7 @@ import { Input, Button, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import styles from './index.less';
 
-const QueryInput = () => {
+const QueryInput = ({ onValueChange }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [value, setValue] = useState('');
   const [popvalue, setPopValue] = useState('');
@@ -27,6 +27,7 @@ const QueryInput = () => {
 
   useEffect(() => {
     setPopValue(value);
+    onValueChange(value);
   }, [value]);
 
   const showModal = () => {
