@@ -106,7 +106,10 @@ class DataValidation extends React.Component {
         id: `item-0${index}`,
         content: mapping.get(item),
         code: item,
-        type: "string"
+        "ct": { //单元格值格式
+          "fa": "General",  //格式名称为自动格式
+          "t": "s" //格式类型为数字类型
+        }
       };
     });
 
