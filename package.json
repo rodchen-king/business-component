@@ -1,6 +1,6 @@
 {
   "name": "@bit-sun/business-component",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -31,6 +31,7 @@
     "antd": "4.17.2",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
+    "loadsh": "^0.0.4",
     "react": "^16.12.0",
     "react-beautiful-dnd": "10.0.0"
   },

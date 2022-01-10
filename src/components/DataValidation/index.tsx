@@ -209,7 +209,13 @@ class DataValidation extends React.Component {
           defaultRowHeight: 20, //自定义行高
           defaultColWidth: 120, //自定义列宽
           config: {},
-          celldata: data,
+          celldata:
+            data && data.length !== 0 ? data : _.flattenDeep(Array.from({ length: 100 }).map((a, b) => Array.from({ length: 100 }).map((c, d) => ({
+              "r": b,
+              "c": d,
+              "v": { "ct": { "fa": "@", "t": "s" }, }
+            }))))
+          ,
           scrollLeft: 0, //左右滚动条位置
           // "scrollTop": 315, //上下滚动条位置
           luckysheet_select_save: [], //选中的区域
