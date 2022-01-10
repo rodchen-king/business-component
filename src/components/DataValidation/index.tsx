@@ -106,6 +106,7 @@ class DataValidation extends React.Component {
         id: `item-0${index}`,
         content: mapping.get(item),
         code: item,
+        type: "string"
       };
     });
 
@@ -418,7 +419,7 @@ class DataValidation extends React.Component {
         console.log(setExportData);
         setExportData([123123]);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   filterData = (type: string) => {
