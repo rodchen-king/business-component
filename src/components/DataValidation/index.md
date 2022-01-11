@@ -23,7 +23,9 @@ export default () => {
   return (
     <div>
       <DataValidation
-        columns={['skuCode', 'quantity', 'price']}
+        // columns={['skuCode', 'quantity', 'price']}
+        columns={["skuCode", "quantity", "price"]}  // 需要哪些列展示，以及展示的顺序
+          validDataUrl="http://test.i-baby.net/wms-ops/recordDetailImport/check" // 校验的接口url
         onRef={(ref) => {
           dataValidationRef = ref;
         }}

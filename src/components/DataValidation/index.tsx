@@ -27,6 +27,7 @@ import {
 } from '@ant-design/icons';
 import axios from 'axios';
 import './index.less';
+import _ from "loadsh"
 
 const luckysheet = window.luckysheet;
 
@@ -209,14 +210,13 @@ class DataValidation extends React.Component {
           defaultRowHeight: 20, //自定义行高
           defaultColWidth: 120, //自定义列宽
           config: {},
-          celldata: data,
-          // celldata:
-          //   data && data.length !== 0 ? data : _.flattenDeep(Array.from({ length: 100 }).map((a, b) => Array.from({ length: 100 }).map((c, d) => ({
-          //     "r": b,
-          //     "c": d,
-          //     "v": { "ct": { "fa": "@", "t": "s" }, }
-          //   }))))
-          // ,
+          celldata:
+            data && data.length !== 0 ? data : _.flattenDeep(Array.from({ length: 100 }).map((a, b) => Array.from({ length: 100 }).map((c, d) => ({
+              "r": b,
+              "c": d,
+              "v": { "ct": { "fa": "@", "t": "s" }, }
+            }))))
+          ,
           scrollLeft: 0, //左右滚动条位置
           // "scrollTop": 315, //上下滚动条位置
           luckysheet_select_save: [], //选中的区域
@@ -343,6 +343,7 @@ class DataValidation extends React.Component {
 
   getValidateData = () => {
     const { resultData } = this.state;
+
     return {
       successData: resultData
         .filter((item) => item.flag)
@@ -373,7 +374,9 @@ class DataValidation extends React.Component {
 
   resetData = () => {
     const { validDataUrl, updateData, columns } = this.props;
-    const resultData = this.getData()
+    const resultData = this.getData().filter(d => {
+      return _.compact(Object.values(d)).length
+    })
 
     axios
       .post(validDataUrl, {
