@@ -1,6 +1,6 @@
 {
   "name": "@bit-sun/business-component",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
