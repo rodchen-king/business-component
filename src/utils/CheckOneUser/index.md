@@ -9,7 +9,7 @@ title: 确保单用户登录
 order: 1
 ---
 
-## QueryMutipleInput
+## CheckOneUser
 
 Demo:
 
