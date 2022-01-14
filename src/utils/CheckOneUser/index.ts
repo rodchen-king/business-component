@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: rodchen
  * @Date: 2022-01-14 14:12:01
- * @LastEditTime: 2022-01-14 16:09:22
+ * @LastEditTime: 2022-01-14 17:17:26
  * @LastEditors: rodchen
  */
 export default (storageKeyString: string, seconds: number = 2, tipsCallFunction?: () =>{}) => {
@@ -40,6 +40,8 @@ function getStorageVale (storageKeyString: string) {
 
   for(let i = 0; i < restKeyArrays.length; i++ ) {
     returnVal = returnVal[restKeyArrays[i]]
+
+    if (!returnVal) return '';
 
     if (typeof returnVal === 'string') {
       return returnVal
